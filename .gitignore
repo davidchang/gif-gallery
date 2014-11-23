@@ -14,3 +14,9 @@ node_modules
 coverage
 *.tgz
 *.xml
+
+client/*.woff
+client/*.eot
+client/*.ttf
+client/*.svg
+client/*.bundled.js
