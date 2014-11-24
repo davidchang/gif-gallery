@@ -1,24 +1,23 @@
 {
-  "name": "Gallery",
-  "plural": "Galleries",
+  "name": "gallery",
+  "plural": "galleries",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
-    "Title": {
+    "title": {
       "type": "string",
       "required": true
     },
-    "Description": {
+    "description": {
       "type": "string"
     },
-    "Gifs": {
+    "gifs": {
       "type": [
         "object"
       ]
     },
-    "Url": {
-      "type": "string",
-      "required": true
+    "url": {
+      "type": "string"
     }
   },
   "validations": [],
