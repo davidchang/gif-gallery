@@ -13,7 +13,8 @@
     "loopback": "^2.5.0",
     "loopback-boot": "^2.2.0",
     "loopback-datasource-juggler": "^2.7.0",
-    "react": "^0.11.1",
+    "react": "^0.12.0",
+    "react-router": "^0.11.1",
     "reflux": "^0.2.0",
     "serve-favicon": "^2.0.1",
     "superagent": "^0.21.0"
