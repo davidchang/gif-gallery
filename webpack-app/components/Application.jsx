@@ -9,6 +9,8 @@ var DefaultRoute = Router.DefaultRoute;
 var RouteHandler = Router.RouteHandler;
 
 var CreateGallery = require('components/CreateGallery');
+var RecordGif = require('components/RecordGif');
+var ViewGallery = require('components/ViewGallery');
 
 var Application = React.createClass({
 
@@ -23,6 +25,8 @@ var Application = React.createClass({
 var routes = (
   <Route name="app" path="/" handler={Application}>
     <Route name="create" handler={CreateGallery} />
+    <Route name="recordGif" path="/record/:galleryId" handler={RecordGif} />
+    <Route name="view" path="/view/:galleryId" handler={ViewGallery} />
     <DefaultRoute handler={CreateGallery} />
   </Route>
 );

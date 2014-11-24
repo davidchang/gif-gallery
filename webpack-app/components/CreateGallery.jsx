@@ -1,5 +1,7 @@
 var React = require('react');
 
+var galleryActions = require('actions/galleryActions');
+
 module.exports = React.createClass({
 
   _createGallery : function() {
