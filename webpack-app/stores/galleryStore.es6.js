@@ -19,6 +19,10 @@ module.exports = Reflux.createStore({
     });
   },
 
+  onSendGif : function(data) {
+    console.log('data', data);
+  },
+
   getExposedData : function() {
     return {
       'loggedIn' : this.loggedIn,

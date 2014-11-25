@@ -4,6 +4,7 @@ var gumHelper = require('lib/gumhelper');
 var galleryActions = require('actions/galleryActions');
 
 var startingInterval;
+var video;
 
 var capture = (callback, priorToGifCallback) => {
   var numFrames = 10,
@@ -41,18 +42,22 @@ module.exports = React.createClass({
   getInitialState: function() {
     return {
       'mode'                 : 'taking',
-      'recordButtonDisabled' : false
+      'recordButtonDisabled' : true
     };
   },
 
   componentDidMount : function() {
     if(navigator.getMedia) {
-      gumHelper.startVideoStreaming(function(err, stream, videoElement) {
+      gumHelper.startVideoStreaming((err, stream, videoElement) => {
         if(err) {
           window.alert(err.message);
         } else {
           videoContainer.appendChild(videoElement);
           video = videoElement;
+
+          this.setState({
+            'recordButtonDisabled' : false
+          });
         }
       });
     } else {
@@ -71,9 +76,10 @@ module.exports = React.createClass({
     });
 
     startingInterval = setInterval(() => {
+      counter--;
       if (!counter) {
         this.setState({
-          'countdownText' : `Recording for  ~${startingInSeconds} seconds...`
+          'countdownText' : `Recording...`
         });
         clearInterval(startingInterval);
         return;
@@ -82,43 +88,80 @@ module.exports = React.createClass({
       this.setState({
         'countdownText' : `Starting in ${counter} seconds...`
       });
-      counter--;
     }, 1000);
 
     setTimeout(() => {
       capture(image => {
-
+        this.setState({
+          'gifSource' : image,
+          'mode'      : 'sending'
+        });
       }, () => {
-
+        this.setState({
+          'mode' : 'saving'
+        });
       });
     }, startingInSeconds * 1000);
+  },
+
+  _tryAgain : function() {
+    this.setState({
+      'countdownText'        : '',
+      'mode'                 : 'taking',
+      'recordButtonDisabled' : false
+    });
+  },
+
+  _sendGifAndMessage : function() {
+
+    var sendData = {
+      'gif'     : this.state.gifSource,
+      'message' : document.getElementById('message').value
+    };
+
+    console.log('send data', sendData);
+
+    return galleryActions.sendGif(sendData);
   },
 
   render : function() {
     var title = 'Please Say Hi to Suzi for her Birthday!';
     var description = 'We may not have seen you recently because we moved away, but I know Suzi would love to see your smiling faces! Please send her a GIF and a message for her birthday! (I\'m keeping this a secret until Sunday)';
 
-    var takingHtml = (
-      <section id="takingPicture">
-        <div id="videoContainer"></div>
-        <div id="snapHolder">
-          <button className="btn main-button" onClick={this._shootGifSoon}>Shoot GIF Soon</button>
-          <span>{this.state.countdownText}</span>
-        </div>
-      </section>
-    );
+    var bodyHtml = '';
+    if (this.state.mode === 'sending') {
+      bodyHtml = (
+        <section style={{'width' : '640px'}}>
+          <h3>Generated GIF:</h3>
+          <h5>
+            If you're unsatisfied, you can always
+            <button className="btn main-button red" onClick={this._tryAgain} style={{'marginLeft' : '10px'}}>
+              try again
+            </button>
+          </h5>
+          <img style={{'backgroundColor' : '#1abc9c'}} className="camera-container" src={this.state.gifSource}></img>
+          <textarea id="message" placeholder="Please leave Suzi a 'Happy Birthday!' sort of message here!" className="form-control" rows="3"></textarea>
+          <button onClick={this._sendGifAndMessage} style={{'marginTop' : '10px'}} className="btn main-button">
+            Send GIF and message
+          </button>
+        </section>
+      );
+    } else {
+      var isSaving = this.state.mode === 'saving';
+      var takingPictureStyle = !isSaving ? {} : { 'opacity' : 0.4 };
 
-    var sendingHtml = (
-      <section id="sendingPicture">
-        <h3>Generated GIF:</h3>
-        <h5>If you're unsatisfied, you can always <button id="again" className="btn">try again</button></h5>
-        <img id="previewImage"></img>
-        <textarea id="message" placeholder="Please leave Suzi a 'Happy Birthday!' sort of message here!" className="form-control" rows="3"></textarea>
-        <button className="btn main-button">Send GIF and message</button>
-      </section>
-    );
-
-    var bodyHtml = this.state.mode === 'taking' ? takingHtml : sendingHtml;
+      bodyHtml = (
+        <section style={takingPictureStyle}>
+          <div id="videoContainer" className="camera-container"></div>
+          <div>
+            <button disabled={this.state.recordButtonDisabled} className="btn main-button" onClick={this._shootGifSoon}>
+              Shoot 3 second GIF
+            </button>
+            <span style={{'marginLeft' : '10px'}}>{isSaving ? 'Saving...' : this.state.countdownText}</span>
+          </div>
+        </section>
+      );
+    }
 
     return (
       <div className="page-wrapper">
@@ -128,8 +171,6 @@ module.exports = React.createClass({
         <h5>[If you have a modern desktop browser and you see an error, try again a few times?]</h5>
 
         {bodyHtml}
-
-        <canvas id="canvas" width="640" height="480"></canvas>
       </div>
     );
   }
