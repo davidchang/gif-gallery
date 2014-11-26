@@ -1,7 +1,8 @@
 var React = require('react');
-var gumHelper = require('lib/gumhelper');
+var gumHelper = require('gumhelper');
 
 var galleryActions = require('actions/galleryActions');
+var galleryStores = require('stores/galleryStore');
 
 var startingInterval;
 var video;
