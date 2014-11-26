@@ -1,4 +1,5 @@
 var Reflux = require('reflux');
+var _ = require('lodash');
 
 var request = require('superagent');
 
@@ -9,13 +10,34 @@ module.exports = Reflux.createStore({
   listenables: galleryActions,
 
   init: function() {
-    this.loggedIn = false;
-    this.user = null;
+    this.gallery = null;
   },
 
   onCreateGallery : function(inputData) {
     GalleryModel.create(inputData, (error, res) => {
+      if (!error) {
+        // redirect to res.body.url
+        location.hash = `#/record/${res.body.url}`;
+      }
+    });
+  },
+
+  onFindOneGallery : function(params) {
+    GalleryModel.findOne(params, (error, res) => {
+      console.log('onFindOneGallery res', res);
+      if (!error && !_.isEmpty(res.body)) {
+        this.gallery = res.body;
+      } else {
+        this.gallery = null;
+      }
       this.emitChange();
+    });
+  },
+
+  // TODO does this actually work?
+  onUpsertGallery : function(params) {
+    GalleryModel.upsert(params, (error, res) => {
+      console.log('onUpsertGallery res', res);
     });
   },
 
@@ -25,8 +47,7 @@ module.exports = Reflux.createStore({
 
   getExposedData : function() {
     return {
-      'loggedIn' : this.loggedIn,
-      'user'     : this.user
+      'gallery' : this.gallery
     };
   },
 

@@ -7,5 +7,13 @@ module.exports = Reflux.createActions([
 
   'sendGif',
   'sendGifSuccess',
-  'sendGifFailure'
+  'sendGifFailure',
+
+  'findOneGallery',
+  'findOneGallerySuccess',
+  'findOneGalleryFailure',
+
+  'upsertGallery',
+  'upsertGallerySuccess',
+  'upsertGalleryFailure'
 ]);

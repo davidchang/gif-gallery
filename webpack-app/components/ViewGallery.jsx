@@ -1,10 +1,11 @@
 var React = require('react');
+var Router = require('react-router');
 
 var galleryActions = require('actions/galleryActions');
 var galleryStores = require('stores/galleryStore');
 
 module.exports = React.createClass({
-
+  mixins : [Router.State],
   componentDidMount : function() {
     var $gallery = document.getElementById('gallery');
 

@@ -1,4 +1,6 @@
 var React = require('react');
+var Router = require('react-router');
+
 var gumHelper = require('gumhelper');
 
 var galleryActions = require('actions/galleryActions');
@@ -39,8 +41,8 @@ var capture = (callback, priorToGifCallback) => {
 };
 
 module.exports = React.createClass({
-
-  getInitialState: function() {
+  mixins : [Router.State],
+  getInitialState : function() {
     return {
       'mode'                 : 'taking',
       'recordButtonDisabled' : true
@@ -48,6 +50,10 @@ module.exports = React.createClass({
   },
 
   componentDidMount : function() {
+
+    // TODO listen to emittedChange
+    galleryActions.findOneGallery(`filter[where][url]=${this.getParams().galleryId}`);
+
     if(navigator.getMedia) {
       gumHelper.startVideoStreaming((err, stream, videoElement) => {
         if(err) {

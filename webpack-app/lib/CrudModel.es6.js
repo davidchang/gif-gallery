@@ -5,15 +5,32 @@ module.exports = class CrudModel {
     this.endpoint = endpoint;
   }
 
-  create(data, cb) {
+  create(params, cb) {
     return request.post(this.endpoint)
-      .send(data)
+      .send(params)
       .end(cb);
   }
 
-  get(params, cb) {
+  find(params, cb) {
     return request.get(this.endpoint)
       .send(params)
+      .end(cb);
+  }
+
+  findOne(params, cb) {
+    return request.get(`${this.endpoint}/findOne`)
+      .send(params)
+      .end(cb);
+  }
+
+  upsert(params, cb) {
+    return request.put(this.endpoint)
+      .send(params)
+      .end(cb);
+  }
+
+  del(id, cb) {
+    return request.del(`this.endpoint/${id}`)
       .end(cb);
   }
 }
