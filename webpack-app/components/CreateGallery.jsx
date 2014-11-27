@@ -21,13 +21,13 @@ module.exports = React.createClass({
           <div className="form-group">
             <label htmlFor="title" className="col-sm-1 control-label">Title</label>
             <div className="col-sm-11">
-              <input type="text" className="form-control" id="title" />
+              <input type="text" className="form-control" id="title" value="Please Say Hi to Suzi for her Birthday!" />
             </div>
           </div>
           <div className="form-group">
             <label htmlFor="description" className="col-sm-1 control-label">Description</label>
             <div className="col-sm-11">
-              <textarea className="form-control" id="description"></textarea>
+              <textarea className="form-control" id="description" value="We may not have seen you recently because we moved away, but I know Suzi would love to see your smiling faces! Please send her a GIF and a message for her birthday! (I\'m keeping this a secret until Sunday)"></textarea>
             </div>
           </div>
           <div className="form-group">

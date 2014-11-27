@@ -5,10 +5,6 @@ module.exports = Reflux.createActions([
   'createGallerySuccess',
   'createGalleryFailure',
 
-  'sendGif',
-  'sendGifSuccess',
-  'sendGifFailure',
-
   'findOneGallery',
   'findOneGallerySuccess',
   'findOneGalleryFailure',

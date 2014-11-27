@@ -24,7 +24,6 @@ module.exports = Reflux.createStore({
 
   onFindOneGallery : function(params) {
     GalleryModel.findOne(params, (error, res) => {
-      console.log('onFindOneGallery res', res);
       if (!error && !_.isEmpty(res.body)) {
         this.gallery = res.body;
       } else {
@@ -38,11 +37,8 @@ module.exports = Reflux.createStore({
   onUpsertGallery : function(params) {
     GalleryModel.upsert(params, (error, res) => {
       console.log('onUpsertGallery res', res);
+      location.hash = `#/view/${res.body.url}`;
     });
-  },
-
-  onSendGif : function(data) {
-    console.log('data', data);
   },
 
   getExposedData : function() {

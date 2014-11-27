@@ -1,12 +1,24 @@
 var React = require('react');
 var Router = require('react-router');
+var Reflux = require('reflux');
 
 var galleryActions = require('actions/galleryActions');
-var galleryStores = require('stores/galleryStore');
+var galleryStore = require('stores/galleryStore');
 
 module.exports = React.createClass({
-  mixins : [Router.State],
+  mixins : [Router.State, Reflux.listenTo(galleryStore, '_onStatusChange')],
+
+  _onStatusChange : function(galleryData) {
+    console.log('status changed!', galleryData);
+    this.setState({
+      'gallery' : galleryData.gallery
+    });
+  },
+
   componentDidMount : function() {
+
+    galleryActions.findOneGallery(`filter[where][url]=${this.getParams().galleryId}`);
+
     var $gallery = document.getElementById('gallery');
 
     var keys = Object.keys(data);

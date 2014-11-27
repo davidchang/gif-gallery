@@ -1,10 +1,11 @@
 var React = require('react');
 var Router = require('react-router');
+var Reflux = require('reflux');
 
 var gumHelper = require('gumhelper');
 
 var galleryActions = require('actions/galleryActions');
-var galleryStores = require('stores/galleryStore');
+var galleryStore = require('stores/galleryStore');
 
 var startingInterval;
 var video;
@@ -41,20 +42,27 @@ var capture = (callback, priorToGifCallback) => {
 };
 
 module.exports = React.createClass({
-  mixins : [Router.State],
+  mixins : [Router.State, Reflux.listenTo(galleryStore, '_onStatusChange')],
+
+  _onStatusChange : function(galleryData) {
+    this.setState({
+      'gallery' : galleryData.gallery
+    });
+  },
+
   getInitialState : function() {
     return {
       'mode'                 : 'taking',
-      'recordButtonDisabled' : true
+      'recordButtonDisabled' : true,
+      'gallery'              : {
+        'title'       : '',
+        'description' : ''
+      }
     };
   },
 
   componentDidMount : function() {
-
-    // TODO listen to emittedChange
-    galleryActions.findOneGallery(`filter[where][url]=${this.getParams().galleryId}`);
-
-    if(navigator.getMedia) {
+    if (navigator.getMedia) {
       gumHelper.startVideoStreaming((err, stream, videoElement) => {
         if(err) {
           window.alert(err.message);
@@ -70,6 +78,8 @@ module.exports = React.createClass({
     } else {
       window.alert(':/ looks like your browser does not support getUserMedia - could you get Chrome on a desktop?');
     }
+
+    galleryActions.findOneGallery(`filter[where][url]=${this.getParams().galleryId}`);
   },
 
   _shootGifSoon : function() {
@@ -121,19 +131,20 @@ module.exports = React.createClass({
 
   _sendGifAndMessage : function() {
 
-    var sendData = {
+    var gallery = _.clone(this.state.gallery, true);
+
+    gallery.gifs = gallery.gifs || [];
+    gallery.gifs.push({
       'gif'     : this.state.gifSource,
       'message' : document.getElementById('message').value
-    };
+    });
 
-    console.log('send data', sendData);
-
-    return galleryActions.sendGif(sendData);
+    return galleryActions.upsertGallery(gallery);
   },
 
   render : function() {
-    var title = 'Please Say Hi to Suzi for her Birthday!';
-    var description = 'We may not have seen you recently because we moved away, but I know Suzi would love to see your smiling faces! Please send her a GIF and a message for her birthday! (I\'m keeping this a secret until Sunday)';
+    // var title = 'Please Say Hi to Suzi for her Birthday!';
+    // var description = 'We may not have seen you recently because we moved away, but I know Suzi would love to see your smiling faces! Please send her a GIF and a message for her birthday! (I\'m keeping this a secret until Sunday)';
 
     var bodyHtml = '';
     if (this.state.mode === 'sending') {
@@ -172,8 +183,8 @@ module.exports = React.createClass({
 
     return (
       <div className="page-wrapper">
-        <h1>{title}</h1>
-        <h3>{description}</h3>
+        <h1>{this.state.gallery.title}</h1>
+        <h3>{this.state.gallery.description}</h3>
         <h5>[You'll need to enable webcam access and use a modern desktop browser]</h5>
         <h5>[If you have a modern desktop browser and you see an error, try again a few times?]</h5>
 
