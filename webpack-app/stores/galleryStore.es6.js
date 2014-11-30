@@ -33,11 +33,11 @@ module.exports = Reflux.createStore({
     });
   },
 
-  // TODO does this actually work?
   onUpsertGallery : function(params) {
     GalleryModel.upsert(params, (error, res) => {
-      console.log('onUpsertGallery res', res);
-      location.hash = `#/view/${res.body.url}`;
+      if (!error) {
+        location.hash = `#/view/${res.body.url}`;
+      }
     });
   },
 
