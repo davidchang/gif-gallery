@@ -13,13 +13,13 @@ module.exports = class CrudModel {
 
   find(params, cb) {
     return request.get(this.endpoint)
-      .send(params)
+      .query(params)
       .end(cb);
   }
 
   findOne(params, cb) {
     return request.get(`${this.endpoint}/findOne`)
-      .send(params)
+      .query(params)
       .end(cb);
   }
 

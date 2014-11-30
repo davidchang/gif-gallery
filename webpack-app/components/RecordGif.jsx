@@ -45,6 +45,14 @@ module.exports = React.createClass({
   mixins : [Router.State, Reflux.listenTo(galleryStore, '_onStatusChange')],
 
   _onStatusChange : function(galleryData) {
+    if (_.isNull(galleryData.gallery)) {
+      this.setState({
+        'invalidUrl' : true
+      });
+
+      return;
+    }
+
     this.setState({
       'gallery' : galleryData.gallery
     });
@@ -142,9 +150,20 @@ module.exports = React.createClass({
     return galleryActions.upsertGallery(gallery);
   },
 
+    _renderInvalidUrl : function() {
+      return (
+        <section className="gallery-container">
+          <div className="page-wrapper">
+            <h1>Invalid Gallery URL</h1>
+          </div>
+        </section>
+      );
+    },
+
   render : function() {
-    // var title = 'Please Say Hi to Suzi for her Birthday!';
-    // var description = 'We may not have seen you recently because we moved away, but I know Suzi would love to see your smiling faces! Please send her a GIF and a message for her birthday! (I\'m keeping this a secret until Sunday)';
+    if (this.state.invalidUrl) {
+      return this._renderInvalidUrl();
+    }
 
     var bodyHtml = '';
     if (this.state.mode === 'sending') {

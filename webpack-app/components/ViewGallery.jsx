@@ -15,6 +15,14 @@ module.exports = React.createClass({
   },
 
   _onStatusChange : function(galleryData) {
+    if (_.isNull(galleryData.gallery)) {
+      this.setState({
+        'invalidUrl' : true
+      });
+
+      return;
+    }
+
     this.setState({
       'gallery' : galleryData.gallery
     });
@@ -24,7 +32,22 @@ module.exports = React.createClass({
     galleryActions.findOneGallery(`filter[where][url]=${this.getParams().galleryId}`);
   },
 
+  _renderInvalidUrl : function() {
+    return (
+      <section className="gallery-container">
+        <div className="page-wrapper">
+          <h1>Invalid Gallery URL</h1>
+        </div>
+      </section>
+    );
+  },
+
   render : function() {
+
+    if (this.state.invalidUrl) {
+      return this._renderInvalidUrl();
+    }
+
     return (
       <section className="gallery-container">
         <div className="page-wrapper">

@@ -1,3 +1,9 @@
+# run the Mongo Docker container
+# docker run --name gif-gallery-db -d mongo
+
+# run this server/app, consuming that Mongo Docker
+# docker run -it --rm -p 3000:3000 -v `pwd`:/home/gif-gallery --link gif-gallery-db:db davidchang/gif-gallery
+
 FROM dockerfile/nginx
 
 # Install Node.js

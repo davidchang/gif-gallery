@@ -24,7 +24,7 @@ module.exports = Reflux.createStore({
 
   onFindOneGallery : function(params) {
     GalleryModel.findOne(params, (error, res) => {
-      if (!error && !_.isEmpty(res.body)) {
+      if (!error && res.status != 404) {
         this.gallery = res.body;
       } else {
         this.gallery = null;
