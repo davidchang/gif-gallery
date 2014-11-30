@@ -6,9 +6,32 @@ module.exports = function(app) {
   app.models.gallery.create = function() {
     var args = Array.prototype.slice.call(arguments);
 
-    args[0].url = new Buffer(args[0].title + salt).toString('base64');
-    // TODO ensure that URL is unique
+    var counter = 0;
 
-    originalCreate.apply(app.models.gallery, args);
+    var proposedUrl = new Buffer(args[0].title + salt).toString('base64');
+
+    var finish = function() {
+      args[0].url = proposedUrl;
+      originalCreate.apply(app.models.gallery, args);
+    };
+
+    var checkUniqueness = function() {
+      app.models.gallery.findOne({
+        'fields' : 'id',
+        'where'  : {
+          'url' : proposedUrl
+        }
+      }, function(err, res) {
+        if (!res) {
+          return finish(proposedUrl);
+        }
+
+        proposedUrl = new Buffer(args[0].title + salt + (counter++)).toString('base64');
+        checkUniqueness();
+      });
+    };
+
+    checkUniqueness();
+
   };
 };
