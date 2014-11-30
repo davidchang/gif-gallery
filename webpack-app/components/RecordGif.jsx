@@ -7,6 +7,8 @@ var gumHelper = require('gumhelper');
 var galleryActions = require('actions/galleryActions');
 var galleryStore = require('stores/galleryStore');
 
+var InvalidUrlHelper = require('lib/InvalidUrlHelper');
+
 var startingInterval;
 var video;
 
@@ -42,21 +44,7 @@ var capture = (callback, priorToGifCallback) => {
 };
 
 module.exports = React.createClass({
-  mixins : [Router.State, Reflux.listenTo(galleryStore, '_onStatusChange')],
-
-  _onStatusChange : function(galleryData) {
-    if (_.isNull(galleryData.gallery)) {
-      this.setState({
-        'invalidUrl' : true
-      });
-
-      return;
-    }
-
-    this.setState({
-      'gallery' : galleryData.gallery
-    });
-  },
+  mixins : [Router.State, Reflux.listenTo(galleryStore, '_onStatusChange'), InvalidUrlHelper],
 
   getInitialState : function() {
     return {
@@ -149,16 +137,6 @@ module.exports = React.createClass({
 
     return galleryActions.upsertGallery(gallery);
   },
-
-    _renderInvalidUrl : function() {
-      return (
-        <section className="gallery-container">
-          <div className="page-wrapper">
-            <h1>Invalid Gallery URL</h1>
-          </div>
-        </section>
-      );
-    },
 
   render : function() {
     if (this.state.invalidUrl) {
