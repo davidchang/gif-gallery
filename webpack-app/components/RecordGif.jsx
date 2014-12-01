@@ -60,7 +60,7 @@ module.exports = React.createClass({
   componentDidMount : function() {
     if (navigator.getMedia) {
       gumHelper.startVideoStreaming((err, stream, videoElement) => {
-        if(err) {
+        if (err) {
           window.alert(err.message);
         } else {
           videoContainer.appendChild(videoElement);
@@ -76,6 +76,10 @@ module.exports = React.createClass({
     }
 
     galleryActions.findOneGallery(`filter[where][url]=${this.getParams().galleryId}`);
+  },
+
+  componentWillUnmount : function() {
+    gumHelper.stopVideoStreaming();
   },
 
   _shootGifSoon : function() {
@@ -122,6 +126,9 @@ module.exports = React.createClass({
       'countdownText'        : '',
       'mode'                 : 'taking',
       'recordButtonDisabled' : false
+    }, () => {
+      document.getElementById('videoContainer').appendChild(video);
+      video.play();
     });
   },
 
@@ -155,7 +162,7 @@ module.exports = React.createClass({
             </button>
           </h5>
           <img style={{'backgroundColor' : '#1abc9c'}} className="camera-container" src={this.state.gifSource}></img>
-          <textarea id="message" placeholder="Please leave Suzi a 'Happy Birthday!' sort of message here!" className="form-control" rows="3"></textarea>
+          <textarea id="message" placeholder="Leave a message here if you'd like!" className="form-control" rows="3"></textarea>
           <button onClick={this._sendGifAndMessage} style={{'marginTop' : '10px'}} className="btn main-button">
             Send GIF and message
           </button>
