@@ -60,9 +60,7 @@ module.exports = React.createClass({
   componentDidMount : function() {
     if (navigator.getMedia) {
       gumHelper.startVideoStreaming((err, stream, videoElement) => {
-        if (err) {
-          window.alert(err.message);
-        } else {
+        if (!err) {
           videoContainer.appendChild(videoElement);
           video = videoElement;
 
@@ -71,8 +69,6 @@ module.exports = React.createClass({
           });
         }
       });
-    } else {
-      window.alert(':/ looks like your browser does not support getUserMedia - could you get Chrome on a desktop?');
     }
 
     galleryActions.findOneGallery(`filter[where][url]=${this.getParams().galleryId}`);

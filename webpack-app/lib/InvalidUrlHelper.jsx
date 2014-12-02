@@ -24,7 +24,7 @@ module.exports = {
     return (
       <section className="gallery-container">
         <div className="page-wrapper">
-          <h1>Invalid Gallery URL</h1>
+          <h1>Invalid URL</h1>
           <h3>Redirecting you to the Invalid Gallery in 3 seconds...</h3>
         </div>
       </section>
