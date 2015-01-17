@@ -13,32 +13,30 @@ module.exports = Reflux.createStore({
     this.gallery = null;
   },
 
-  onCreateGallery : function(inputData) {
-    GalleryModel.create(inputData, (error, res) => {
-      if (!error) {
-        // redirect to res.body.url
-        location.hash = `#/record/${res.body.url}`;
-      }
-    });
+  onCreateGalleryCompleted : function(res) {
+    location.hash = `#/record/${res.body.url}`;
   },
 
-  onFindOneGallery : function(params) {
-    GalleryModel.findOne(params, (error, res) => {
-      if (!error && res.status != 404) {
-        this.gallery = res.body;
-      } else {
-        this.gallery = null;
-      }
-      this.emitChange();
-    });
+  onCreateGalleryFailed : function() {
+
   },
 
-  onUpsertGallery : function(params) {
-    GalleryModel.upsert(params, (error, res) => {
-      if (!error) {
-        location.hash = `#/view/${res.body.url}`;
-      }
-    });
+  onFindOneGalleryCompleted : function(res) {
+    this.gallery = res.body;
+    this.emitChange();
+  },
+
+  onFindOneGalleryFailed : function() {
+    this.gallery = null;
+    this.emitChange();
+  },
+
+  onUpsertGalleryCompleted : function(res) {
+    location.hash = `#/view/${res.body.url}`;
+  },
+
+  onUpsertGalleryFailed : function() {
+
   },
 
   getExposedData : function() {
@@ -47,8 +45,14 @@ module.exports = Reflux.createStore({
     };
   },
 
-  emitChange : function() {
-    this.trigger(this.getExposedData());
+  emitChange : function(status) {
+    var expose = this.getExposedData();
+
+    if (status) {
+      expose._status = status;
+    }
+
+    this.trigger(expose);
   }
 
 });

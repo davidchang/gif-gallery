@@ -129,16 +129,13 @@ module.exports = React.createClass({
   },
 
   _sendGifAndMessage : function() {
-
-    var gallery = _.clone(this.state.gallery, true);
-
-    gallery.gifs = gallery.gifs || [];
-    gallery.gifs.push({
-      'gif'     : this.state.gifSource,
-      'message' : document.getElementById('message').value
-    });
-
-    return galleryActions.upsertGallery(gallery);
+    return galleryActions.addGifToGallery(
+      this.state.gallery,
+      {
+        'source'  : this.state.gifSource,
+        'message' : document.getElementById('message').value
+      }
+    );
   },
 
   render : function() {
