@@ -10,7 +10,7 @@ module.exports = {
       setTimeout(() => {
         location.hash = `#/view/404`;
         location.reload();
-      }, 3000);
+      }, 1000);
 
       return;
     }
@@ -25,7 +25,7 @@ module.exports = {
       <section className="gallery-container">
         <div className="page-wrapper">
           <h1>Invalid URL</h1>
-          <h3>Redirecting you to the Invalid Gallery in 3 seconds...</h3>
+          <h3>Redirecting you to the Invalid Gallery in 1 second...</h3>
         </div>
       </section>
     );
