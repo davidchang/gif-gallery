@@ -32,8 +32,7 @@ var Application = React.createClass({
 
 var routes = (
   <Route name="app" path="/" handler={Application}>
-    <Redirect from="view/404" to="view" params={{ 'galleryId' : 'NDA0IHBhZ2VrZXlib2FyZCBjYXQ=' }}/>
-    <Redirect from="" to="view" params={{ 'galleryId' : 'V2VsY29tZSB0byBHaWYgR2FsbGVyeWtleWJvYXJkIGNhdA==' }}/>
+    <Redirect from="" to="view" params={{ 'galleryId' : 'home' }}/>
 
     <Route name="create" handler={CreateGallery} />
     <Route name="recordGif" path="/record/:galleryId" handler={RecordGif} />

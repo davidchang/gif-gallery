@@ -43,8 +43,8 @@ module.exports = React.createClass({
         <div>
           {(this.state.gallery.gifs || []).map(gif => {
             return (
-              <section>
-                <img src={gif.gif} />
+              <section key={gif.url}>
+                <img src={gif.url} />
                 <div>{gif.message}</div>
               </section>
             );

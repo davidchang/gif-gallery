@@ -44,11 +44,23 @@ Actions.upsertGallery.listen(function(params) {
 });
 
 Actions.addGifToGallery.listen(function(gallery, gifData) {
-  // var params = { id : galleryId, gif : gif };
-  var fileTitle = `${gallery.title}_gif${gallery.gifs.length}`;
-  GalleryModel.addGifToGallery(fileTitle, gifData.source, (error, res) => {
-    if (!error && res.status != 404) {
-      return this.completed(res);
+  GalleryModel.addGifToGallery(gallery.title, gifData.source, (error, res) => {
+    if (!error && res.status != 404 && res.body.url) {
+
+      gallery.gifs = gallery.gifs || [];
+      gallery.gifs.push({
+        message : gifData.message,
+        url     : res.body.url
+      });
+
+      var $this = this;
+      Actions.upsertGallery(gallery, (error, res) => {
+        if (!error && res.status != 404) {
+          return $this.completed(res);
+        }
+
+        return $this.failed(error);
+      });
     }
 
     return this.failed(error);
