@@ -1,9 +1,6 @@
 {
   "db": {
-    "name": "db",
     "connector": "mongodb",
-    "host": "127.0.0.1",
-    "database": "db",
-    "port": 27017
+    "url": "mongodb://localhost:27017/db"
   }
 }
