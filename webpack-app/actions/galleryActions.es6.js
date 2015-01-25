@@ -49,8 +49,9 @@ Actions.addGifToGallery.listen(function(gallery, gifData) {
 
       gallery.gifs = gallery.gifs || [];
       gallery.gifs.push({
-        message : gifData.message,
-        url     : res.body.url
+        message   : gifData.message,
+        url       : res.body.url,
+        timestamp : new Date().valueOf()
       });
 
       var $this = this;

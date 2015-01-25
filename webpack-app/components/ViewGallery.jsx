@@ -38,17 +38,19 @@ module.exports = React.createClass({
         <div className="page-wrapper">
           <h1>{this.state.gallery.title}</h1>
           <h3>{this.state.gallery.description}</h3>
-          {recordLink}
-        </div>
-        <div>
-          {(this.state.gallery.gifs || []).map(gif => {
-            return (
-              <section key={gif.url}>
-                <img src={gif.url} />
-                <div>{gif.message}</div>
-              </section>
-            );
-          })}
+
+          <div>{recordLink}</div>
+
+          <div id="gif-list">
+            {(this.state.gallery.gifs || []).map(gif => {
+              return (
+                <div className="gif-item" key={gif.url}>
+                  <img src={gif.url} />
+                  <div>{gif.message}</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
     );
