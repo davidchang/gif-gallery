@@ -50,6 +50,7 @@ module.exports = React.createClass({
     return {
       'mode'                 : 'taking',
       'recordButtonDisabled' : true,
+      'saveButtonDisabled'   : false,
       'gallery'              : {
         'title'       : '',
         'description' : ''
@@ -129,6 +130,9 @@ module.exports = React.createClass({
   },
 
   _sendGifAndMessage : function() {
+    this.setState({
+      'saveButtonDisabled' : true
+    });
     return galleryActions.addGifToGallery(
       this.state.gallery,
       {
@@ -156,7 +160,7 @@ module.exports = React.createClass({
           </h5>
           <img style={{'backgroundColor' : '#1abc9c'}} className="camera-container" src={this.state.gifSource}></img>
           <textarea id="message" placeholder="Leave a message here if you'd like!" className="form-control" rows="3"></textarea>
-          <button onClick={this._sendGifAndMessage} style={{'marginTop' : '10px'}} className="btn main-button">
+          <button disabled={this.state.saveButtonDisabled} onClick={this._sendGifAndMessage} style={{'marginTop' : '10px'}} className="btn main-button">
             Send GIF and message
           </button>
         </section>
