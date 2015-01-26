@@ -4,10 +4,13 @@ require('bootstrap/dist/css/bootstrap.css');
 require('styles/styles.less');
 
 var Router = require('react-router');
-var Route = Router.Route;
-var Redirect = Router.Redirect;
-var NotFoundRoute = Router.NotFoundRoute;
-var RouteHandler = Router.RouteHandler;
+var {
+  Route,
+  Link,
+  Redirect,
+  NotFoundRoute,
+  RouteHandler
+} = Router;
 
 var CreateGallery = require('components/CreateGallery');
 var RecordGif = require('components/RecordGif');
@@ -21,10 +24,12 @@ var Application = React.createClass({
         <nav className="navbar navbar-default">
           <div className="container-fluid">
             <div className="navbar-header">
-              <a className="navbar-brand" href="#/view/home">Gif Gallery</a>
+                <Link className="navbar-brand" to="view" params={{ 'galleryId' : 'home '}}>Gif Gallery</Link>
             </div>
             <ul className="nav navbar-nav">
-              <li><a href="#/create">Create Your Own Gif Gallery</a></li>
+              <li>
+                <Link to="create">Create Your Own Gif Gallery</Link>
+              </li>
             </ul>
           </div>
         </nav>
