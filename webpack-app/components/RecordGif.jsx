@@ -44,7 +44,12 @@ var capture = (callback, priorToGifCallback) => {
 };
 
 module.exports = React.createClass({
-  mixins : [Router.State, Reflux.listenTo(galleryStore, '_onStatusChange'), InvalidUrlHelper],
+  mixins : [
+    Router.State,
+    Router.Navigation,
+    Reflux.listenTo(galleryStore, '_onStatusChange'),
+    InvalidUrlHelper
+  ],
 
   getInitialState : function() {
     return {

@@ -2,14 +2,17 @@ var React = require('react');
 
 module.exports = {
   _onStatusChange : function(galleryData) {
+    if (galleryData._status === 'galleryUpdated') {
+      return this.transitionTo('view', { galleryId : galleryData.gallery.url });
+    }
+
     if (_.isNull(galleryData.gallery)) {
       this.setState({
         'invalidUrl' : true
       });
 
       setTimeout(() => {
-        location.hash = `#/view/404`;
-        location.reload();
+        this.transitionTo('view', { galleryId : '404' });
       }, 1000);
 
       return;

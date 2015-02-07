@@ -1,9 +1,22 @@
 var React = require('react');
+var Router = require('react-router');
+var Reflux = require('reflux');
 
 var galleryActions = require('actions/galleryActions');
-var galleryStores = require('stores/galleryStore');
+var galleryStore = require('stores/galleryStore');
 
 module.exports = React.createClass({
+
+  mixins : [
+    Router.Navigation,
+    Reflux.listenTo(galleryStore, '_onStatusChange')
+  ],
+
+  _onStatusChange : function(galleryData) {
+    if (galleryData._status === 'galleryCreated') {
+      this.transitionTo('record', { galleryId : galleryData.gallery.url });
+    }
+  },
 
   _createGallery : function() {
     var inputData = {
