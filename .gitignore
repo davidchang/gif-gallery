@@ -16,6 +16,7 @@ coverage
 *.xml
 
 client/*.woff
+client/*.woff2
 client/*.eot
 client/*.ttf
 client/*.svg
