@@ -14,7 +14,8 @@ module.exports = Reflux.createStore({
   },
 
   onCreateGalleryCompleted : function(res) {
-    location.hash = `#/record/${res.body.url}`;
+    this.gallery = res.body;
+    this.emitChange('galleryCreated');
   },
 
   onCreateGalleryFailed : function() {
@@ -32,7 +33,8 @@ module.exports = Reflux.createStore({
   },
 
   onUpsertGalleryCompleted : function(res) {
-    location.hash = `#/view/${res.body.url}`;
+    this.gallery = res.body;
+    this.emitChange('galleryUpdated');
   },
 
   onUpsertGalleryFailed : function() {

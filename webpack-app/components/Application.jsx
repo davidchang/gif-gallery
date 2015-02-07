@@ -24,7 +24,7 @@ var Application = React.createClass({
         <nav className="navbar navbar-default">
           <div className="container-fluid">
             <div className="navbar-header">
-                <Link className="navbar-brand" to="view" params={{ 'galleryId' : 'home '}}>Gif Gallery</Link>
+                <Link className="navbar-brand" to="view" params={{ 'galleryId' : 'home'}}>Gif Gallery</Link>
             </div>
             <ul className="nav navbar-nav">
               <li>
@@ -45,13 +45,13 @@ var routes = (
     <Redirect from="" to="view" params={{ 'galleryId' : 'home' }}/>
 
     <Route name="create" handler={CreateGallery} />
-    <Route name="recordGif" path="/record/:galleryId" handler={RecordGif} />
+    <Route name="record" path="/record/:galleryId" handler={RecordGif} />
     <Route name="view" path="/view/:galleryId" handler={ViewGallery} />
 
     <NotFoundRoute handler={ViewGallery} />
   </Route>
 );
 
-Router.run(routes, function (Handler) {
+Router.run(routes, Router.HistoryLocation, function (Handler) {
   React.render(<Handler />, document.body);
 });

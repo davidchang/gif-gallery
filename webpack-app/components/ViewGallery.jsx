@@ -7,8 +7,15 @@ var galleryStore = require('stores/galleryStore');
 
 var InvalidUrlHelper = require('lib/InvalidUrlHelper');
 
+var lastGalleryId = null;
+
 module.exports = React.createClass({
-  mixins : [Router.State, Reflux.listenTo(galleryStore, '_onStatusChange'), InvalidUrlHelper],
+  mixins : [
+    Router.State,
+    Router.Navigation,
+    Reflux.listenTo(galleryStore, '_onStatusChange'),
+    InvalidUrlHelper
+  ],
 
   getInitialState : function() {
     return {
@@ -17,7 +24,23 @@ module.exports = React.createClass({
   },
 
   componentDidMount : function() {
-    galleryActions.findOneGallery(`filter[where][url]=${this.getParams().galleryId}`);
+    lastGalleryId = this.getParams().galleryId;
+    galleryActions.findOneGallery(`filter[where][url]=${lastGalleryId}`);
+  },
+
+  // since you may be redirecting from an invalid /view/id page to /view/404
+  componentWillReceiveProps : function() {
+    if (lastGalleryId !== this.getParams().galleryId) {
+      lastGalleryId = this.getParams().galleryId;
+      this.setState({
+        invalidUrl : false
+      });
+      galleryActions.findOneGallery(`filter[where][url]=${lastGalleryId}`);
+    }
+  },
+
+  _goToRecord : function() {
+    this.transitionTo('record', this.getParams());
   },
 
   render : function() {
@@ -30,7 +53,7 @@ module.exports = React.createClass({
 
     // avoid FOUC
     if (this.state.gallery.title) {
-      recordLink = <a href={'#/record/' + this.getParams().galleryId}>Add a Gif to this gallery</a>;
+      recordLink = <a onClick={this._goToRecord}>Add a Gif to this gallery</a>;
     }
 
     return (
