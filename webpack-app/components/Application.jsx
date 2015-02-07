@@ -42,12 +42,11 @@ var Application = React.createClass({
 
 var routes = (
   <Route name="app" path="/" handler={Application}>
-    <Redirect from="" to="view" params={{ 'galleryId' : 'home' }}/>
-
     <Route name="create" handler={CreateGallery} />
     <Route name="record" path="/record/:galleryId" handler={RecordGif} />
     <Route name="view" path="/view/:galleryId" handler={ViewGallery} />
 
+    <Redirect from="" to="view" params={{ 'galleryId' : 'home' }}/>
     <NotFoundRoute handler={ViewGallery} />
   </Route>
 );
